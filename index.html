@@ -1,0 +1,106 @@
+<!doctype html>
+
+<html lang="pt-BR" class="h-full">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sistema de Gerenciamento de Treinamentos</title>
+
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="h-full bg-slate-900 text-white overflow-hidden">
+
+<div id="app" class="h-full w-full flex flex-col overflow-auto">
+
+<header class="gradient-bg shadow-lg">
+<div class="max-w-7xl mx-auto px-4 py-4">
+
+<div class="flex items-center justify-between">
+
+<div class="flex items-center gap-3">
+
+<div class="bg-white/20 p-2 rounded-xl">
+<i data-lucide="graduation-cap" class="w-8 h-8"></i>
+</div>
+
+<div>
+<h1 class="text-xl md:text-2xl font-bold">
+Sistema de Gerenciamento de Treinamentos
+</h1>
+
+<p class="text-white/80 text-sm">
+Gerencie seus treinamentos de forma simples
+</p>
+</div>
+
+</div>
+
+<nav class="hidden md:flex items-center gap-2">
+
+<button class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10">
+<i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+Dashboard
+</button>
+
+<button class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg">
+<i data-lucide="book-open" class="w-4 h-4"></i>
+Treinamentos
+</button>
+
+<button class="nav-btn flex items-center gap-2 px-4 py-2 rounded-lg">
+<i data-lucide="clipboard-check" class="w-4 h-4"></i>
+Avaliações
+</button>
+
+</nav>
+
+</div>
+
+</div>
+</header>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 py-10">
+
+<section class="game-ranking" id="ranking-area">
+
+<h2 class="ranking-title text-center text-3xl font-bold mb-10 text-sky-400">
+🏆 Leaderboard
+</h2>
+
+<div id="podium" class="podium flex justify-center items-end gap-8 mb-14"></div>
+
+<div id="ranking-list" class="ranking-list max-w-xl mx-auto flex flex-col gap-4"></div>
+
+</section>
+
+</main>
+
+<footer class="bg-slate-800/50 border-t border-slate-700 py-4 text-center text-slate-400 text-sm">
+
+Sistema de Gerenciamento de Treinamentos © 2024
+
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+lucide.createIcons()
+</script>
+
+</body>
+
+</html>
