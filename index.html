@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CapacitaHub — Plataforma de Treinamentos</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div class="login-bg-orb orb-1"></div>
+    <div class="login-bg-orb orb-2"></div>
+    <div class="login-bg-orb orb-3"></div>
+
+    <div class="w-full max-w-md relative z-10">
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-3 mb-3">
+          <div class="logo-icon">
+            <i data-lucide="zap" class="w-7 h-7"></i>
+          </div>
+          <span class="text-3xl font-black tracking-tight text-white">Capacita<span
+              class="text-accent">Hub</span></span>
+        </div>
+        <p class="text-slate-400 text-sm">Plataforma de Gerenciamento de Treinamentos</p>
+      </div>
+
+      <!-- Login Card -->
+      <div id="login-card" class="glass-card rounded-2xl p-8">
+        <h2 class="text-xl font-bold text-white mb-1">Bem-vindo de volta!</h2>
+        <p class="text-slate-400 text-sm mb-6">Acesse sua conta para continuar</p>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">E-mail</label>
+            <div class="input-wrapper">
+              <i data-lucide="mail" class="input-icon w-4 h-4"></i>
+              <input id="login-email" type="email" placeholder="seu@email.com" required class="form-input"
+                autocomplete="email">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">Senha</label>
+            <div class="input-wrapper">
+              <i data-lucide="lock" class="input-icon w-4 h-4"></i>
+              <input id="login-password" type="password" placeholder="••••••••" required class="form-input"
+                autocomplete="current-password">
+              <button type="button" onclick="togglePassword('login-password',this)" class="password-toggle">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mb-6">
+            <input type="checkbox" id="remember-me" class="custom-check">
+            <label for="remember-me" class="text-sm text-slate-400">Lembrar meu acesso</label>
+          </div>
+          <button type="submit" class="btn-primary w-full">
+            <i data-lucide="log-in" class="w-4 h-4"></i>
+            Entrar
+          </button>
+        </form>
+        <div class="divider my-5"><span>ou</span></div>
+        <button onclick="showRegisterScreen()" class="btn-secondary w-full">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          Criar nova conta
+        </button>
+        <div class="mt-5 p-3 rounded-xl bg-white/5 border border-white/10">
+          <p class="text-xs text-slate-400 font-semibold mb-2">Contas de demonstração:</p>
+          <div class="space-y-1 text-xs text-slate-500 font-mono">
+            <div class="flex justify-between"><span>admin@capacitahub.com</span><span>admin123</span></div>
+            <div class="flex justify-between"><span>prof@capacitahub.com</span><span>prof123</span></div>
+            <div class="flex justify-between"><span>aluno@capacitahub.com</span><span>aluno123</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register Card -->
+      <div id="register-card" class="glass-card rounded-2xl p-8 hidden">
+        <h2 class="text-xl font-bold text-white mb-1">Criar conta</h2>
+        <p class="text-slate-400 text-sm mb-6">Preencha os dados para se cadastrar</p>
+        <form id="register-form" onsubmit="handleRegister(event)">
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">Nome completo</label>
+            <div class="input-wrapper">
+              <i data-lucide="user" class="input-icon w-4 h-4"></i>
+              <input id="register-name" type="text" placeholder="Seu nome" required class="form-input">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">E-mail</label>
+            <div class="input-wrapper">
+              <i data-lucide="mail" class="input-icon w-4 h-4"></i>
+              <input id="register-email" type="email" placeholder="seu@email.com" required class="form-input">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">Tipo de conta</label>
+            <div class="input-wrapper">
+              <i data-lucide="shield" class="input-icon w-4 h-4"></i>
+              <select id="register-role" class="form-input form-select">
+                <option value="Aluno">Aluno</option>
+                <option value="Professor">Professor</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">Senha</label>
+            <div class="input-wrapper">
+              <i data-lucide="lock" class="input-icon w-4 h-4"></i>
+              <input id="register-password" type="password" placeholder="Mínimo 8 caracteres" required
+                class="form-input">
+              <button type="button" onclick="togglePassword('register-password',this)" class="password-toggle">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+          <div class="mb-6">
+            <label class="block text-sm text-slate-300 mb-1.5 font-medium">Confirmar senha</label>
+            <div class="input-wrapper">
+              <i data-lucide="lock" class="input-icon w-4 h-4"></i>
+              <input id="register-confirm-password" type="password" placeholder="Repita a senha" required
+                class="form-input">
+            </div>
+          </div>
+          <button type="submit" class="btn-primary w-full">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+            Criar conta
+          </button>
+        </form>
+        <div class="divider my-5"><span>ou</span></div>
+        <button onclick="showLoginScreen()" class="btn-secondary w-full">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          Voltar para o login
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN APP ========== -->
+  <div id="app" class="hidden min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="app-header sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <div class="logo-icon-sm">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <span class="text-xl font-black tracking-tight text-white hidden sm:block">Capacita<span
+              class="text-accent">Hub</span></span>
+        </div>
+
+        <!-- Nav -->
+        <nav class="hidden md:flex items-center gap-1">
+          <button class="nav-btn active" data-section="dashboard" onclick="showSection('dashboard')">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            Dashboard
+          </button>
+          <button class="nav-btn" data-section="trainings" onclick="showSection('trainings')">
+            <i data-lucide="play-circle" class="w-4 h-4"></i>
+            Treinamentos
+          </button>
+          <button class="nav-btn" data-section="evaluations" onclick="showSection('evaluations')">
+            <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+            Avaliações
+          </button>
+          <button id="nav-certificates" class="nav-btn hidden" data-section="certificates"
+            onclick="showSection('certificates')">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            Certificados
+          </button>
+          <button id="nav-class" class="nav-btn hidden" onclick="showSection('class')">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            Controle da Turma
+          </button>
+        </nav>
+
+        <!-- Profile -->
+        <div class="relative">
+          <button onclick="toggleProfileMenu()" class="profile-btn flex items-center gap-2">
+            <div class="avatar" id="header-avatar">A</div>
+            <div class="hidden sm:block text-left">
+              <div class="text-sm font-semibold text-white leading-tight" id="user-name">Usuário</div>
+              <div class="text-xs text-slate-400" id="user-role-badge">Carregando...</div>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 hidden sm:block"></i>
+          </button>
+          <!-- Dropdown -->
+          <div id="profile-menu" class="profile-dropdown hidden absolute right-0 top-full mt-2 w-56 z-50">
+            <div class="p-3 border-b border-white/10">
+              <div class="font-semibold text-white" id="menu-user-name">Usuário</div>
+              <div class="text-xs text-slate-400" id="menu-user-email">email@exemplo.com</div>
+              <div class="role-badge mt-1" id="menu-user-role">Aluno</div>
+            </div>
+            <div class="p-2">
+              <button onclick="showSection('profile');toggleProfileMenu()" class="dropdown-item w-full">
+                <i data-lucide="user" class="w-4 h-4"></i>
+                Meu Perfil
+              </button>
+              <button onclick="logout()" class="dropdown-item w-full text-red-400">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile nav -->
+      <div class="md:hidden border-t border-white/10 px-4 py-2 flex gap-1 overflow-x-auto">
+        <button class="nav-btn-mobile active" data-section="dashboard" onclick="showSection('dashboard')">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+          Dashboard
+        </button>
+        <button class="nav-btn-mobile" data-section="trainings" onclick="showSection('trainings')">
+          <i data-lucide="play-circle" class="w-4 h-4"></i>
+          Treinos
+        </button>
+        <button class="nav-btn-mobile" data-section="evaluations" onclick="showSection('evaluations')">
+          <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+          Avaliações
+        </button>
+        <button id="nav-certificates-mobile" class="nav-btn-mobile hidden" data-section="certificates"
+          onclick="showSection('certificates')">
+          <i data-lucide="award" class="w-4 h-4"></i>
+          Certs
+        </button>
+        <button id="nav-class-mobile" class="nav-btn-mobile hidden" onclick="showSection('class')">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          Turma
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section id="section-dashboard" class="section-fade">
+        <!-- Stats Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="stat-card">
+            <div class="stat-icon bg-blue-500/20 text-blue-400"><i data-lucide="play-circle" class="w-5 h-5"></i></div>
+            <div class="stat-num" id="stat-trainings">0</div>
+            <div class="stat-label">Treinamentos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-purple-500/20 text-purple-400"><i data-lucide="video" class="w-5 h-5"></i></div>
+            <div class="stat-num" id="stat-lessons">0</div>
+            <div class="stat-label">Videoaulas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-amber-500/20 text-amber-400"><i data-lucide="clipboard-check" class="w-5 h-5"></i>
+            </div>
+            <div class="stat-num" id="stat-evaluations">0</div>
+            <div class="stat-label">Avaliações</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-emerald-500/20 text-emerald-400"><i data-lucide="users" class="w-5 h-5"></i></div>
+            <div class="stat-num" id="stat-students">247</div>
+            <div class="stat-label">Alunos Ativos</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <!-- RANKING -->
+          <div class="xl:col-span-2">
+            <div class="ranking-card">
+              <div class="ranking-header">
+                <div class="flex items-center gap-3">
+                  <div class="trophy-icon">🏆</div>
+                  <div>
+                    <h2 class="text-xl font-black text-white">Ranking dos Alunos</h2>
+                    <p class="text-xs text-slate-400">Atualizado em tempo real</p>
+                  </div>
+                </div>
+                <div class="live-badge">
+                  <span class="live-dot"></span>
+                  AO VIVO
+                </div>
+              </div>
+
+              <!-- Podium -->
+              <div id="podium" class="podium-container"></div>
+
+              <!-- List -->
+              <div id="ranking-list" class="ranking-list-container"></div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Profile + Courses Preview -->
+          <div class="flex flex-col gap-4">
+            <!-- Profile Card -->
+            <div class="profile-preview-card">
+              <div class="profile-card-bg"></div>
+              <div class="relative z-10 p-5">
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="avatar-lg" id="profile-avatar-lg">A</div>
+                  <div>
+                    <div class="font-bold text-white text-lg leading-tight" id="profile-name">Usuário</div>
+                    <div class="role-badge-lg" id="profile-role">Aluno</div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-center">
+                  <div class="mini-stat">
+                    <div class="mini-stat-num">4</div>
+                    <div class="mini-stat-label">Cursos</div>
+                  </div>
+                </div>
+                <button onclick="showSection('profile')" class="btn-outline w-full mt-3 text-sm">
+                  <i data-lucide="user" class="w-4 h-4"></i>
+                  Ver perfil completo
+                </button>
+              </div>
+            </div>
+
+            <!-- Course Previews -->
+            <div>
+              <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Seus cursos</h3>
+              <div id="dashboard-courses" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROFILE ===== -->
+      <section id="section-profile" class="section-fade hidden">
+        <div class="max-w-2xl mx-auto">
+          <h1 class="text-2xl font-black text-white mb-6">Meu Perfil</h1>
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="profile-banner h-28 relative"></div>
+            <div class="p-6 -mt-12 relative">
+              <div class="flex items-end justify-between mb-4">
+                <div class="avatar-xl border-4 border-slate-900" id="big-avatar">A</div>
+                <div class="role-tag" id="big-role">Aluno</div>
+              </div>
+              <div class="mb-6">
+                <h2 class="text-2xl font-black text-white" id="big-name">Usuário</h2>
+                <p class="text-slate-400" id="big-email">email@exemplo.com</p>
+              </div>
+              <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="profile-stat">
+                  <div class="profile-stat-num">4</div>
+                  <div class="profile-stat-label">Cursos</div>
+                </div>
+                <div class="profile-stat">
+                  <div class="profile-stat-num" id="big-certs">2</div>
+                  <div class="profile-stat-label">Certs.</div>
+                </div>
+              </div>
+              <div class="border-t border-white/10 pt-4">
+                <h3 class="font-semibold text-white mb-3">Progresso nos cursos</h3>
+                <div id="profile-courses" class="space-y-3"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TRAININGS ===== -->
+      <section id="section-trainings" class="section-fade hidden">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-2xl font-black text-white">Treinamentos</h1>
+            <p class="text-slate-400 text-sm">Acesse as videoaulas e conteúdos</p>
+          </div>
+          <button id="btn-add-training" onclick="openAddModal()" class="btn-primary hidden">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Novo Treinamento
+          </button>
+        </div>
+        <div id="trainings-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </section>
+
+      <!-- ===== TRAINING DETAIL ===== -->
+      <section id="section-training-detail" class="section-fade hidden">
+        <div id="training-detail-content"></div>
+      </section>
+
+      <!-- ===== EVALUATIONS ===== -->
+      <section id="section-evaluations" class="section-fade hidden">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-2xl font-black text-white">Avaliações</h1>
+            <p class="text-slate-400 text-sm">Provas e questionários dos cursos</p>
+          </div>
+          <button id="btn-add-evaluation" onclick="openAddEvaluationModal()" class="btn-primary hidden">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            Nova Avaliação
+          </button>
+        </div>
+        <div id="evaluations-list" class="space-y-4"></div>
+      </section>
+
+      <!-- ===== QUIZ ===== -->
+      <section id="section-quiz" class="section-fade hidden">
+        <div id="quiz-content" class="max-w-2xl mx-auto"></div>
+      </section>
+
+      <!-- ===== CERTIFICATES ===== -->
+      <section id="section-certificates" class="section-fade hidden">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-2xl font-black text-white">Certificados</h1>
+            <p class="text-slate-400 text-sm">Emissão de certificados para alunos</p>
+          </div>
+        </div>
+        <div id="certificates-content"></div>
+      </section>
+      <section id="section-certificates" class="section-fade hidden">
+      </section>
+
+      <!-- 👇 COLE AQUI -->
+      <section id="section-class" class="section-fade hidden">
+        <h1 class="text-2xl font-black text-white mb-6">Controle da Turma</h1>
+
+        <div class="glass-card p-5 rounded-xl mb-4">
+          <h2 class="text-white font-bold mb-3">Chamada</h2>
+          <div id="attendance-list"></div>
+        </div>
+
+        <div class="glass-card p-5 rounded-xl mb-4">
+          <h2 class="text-white font-bold mb-3">Notas dos Alunos</h2>
+          <div id="grades-list"></div>
+        </div>
+
+        <div class="glass-card p-5 rounded-xl">
+          <h2 class="text-white font-bold mb-3">Certificados dos Alunos</h2>
+          <div id="teacher-certificates"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========== MODALS ========== -->
+
+  <!-- Add/Edit Training Modal -->
+  <div id="modal-training" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-bg" onclick="closeModal()"></div>
+    <div class="modal-card w-full max-w-lg">
+      <div class="modal-header">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2" id="modal-title">
+          <i data-lucide="plus-circle" class="w-5 h-5 text-accent"></i>
+          Novo Treinamento
+        </h3>
+        <button onclick="closeModal()" class="modal-close"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="training-form" onsubmit="saveTraining(event)" class="p-5 space-y-4">
+        <input type="hidden" id="training-id">
+        <div>
+          <label class="form-label">Nome do treinamento</label>
+          <input id="training-name" type="text" required class="form-input-dark" placeholder="Ex: Excel Avançado">
+        </div>
+        <div>
+          <label class="form-label">Descrição</label>
+          <textarea id="training-description" required class="form-input-dark" rows="3"
+            placeholder="Descreva o treinamento..."></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="form-label">Carga horária</label>
+            <input id="training-hours" type="text" required class="form-input-dark" placeholder="Ex: 20 horas">
+          </div>
+          <div>
+            <label class="form-label">Área</label>
+            <select id="training-area" class="form-input-dark">
+              <option>Tecnologia</option>
+              <option>Gestão</option>
+              <option>Marketing</option>
+              <option>Finanças</option>
+              <option>Comunicação</option>
+              <option>Segurança</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeModal()" class="btn-ghost flex-1">Cancelar</button>
+          <button type="submit" class="btn-primary flex-1">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span id="modal-submit-text">Cadastrar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div id="modal-delete" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-bg" onclick="closeDeleteModal()"></div>
+    <div class="modal-card w-full max-w-sm text-center">
+      <div class="p-6">
+        <div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="trash-2" class="w-8 h-8 text-red-400"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Confirmar exclusão</h3>
+        <p class="text-slate-400 text-sm mb-6" id="delete-message">Deseja excluir este item?</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="btn-ghost flex-1">Cancelar</button>
+          <button onclick="confirmDelete()" class="btn-danger flex-1">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Evaluation Modal -->
+  <div id="modal-add-evaluation" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-bg" onclick="closeAddEvaluationModal()"></div>
+    <div class="modal-card w-full max-w-lg">
+      <div class="modal-header">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="clipboard-plus" class="w-5 h-5 text-amber-400"></i>
+          Nova Avaliação
+        </h3>
+        <button onclick="closeAddEvaluationModal()" class="modal-close"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form id="add-evaluation-form" onsubmit="saveNewEvaluation(event)" class="p-5 space-y-4">
+        <div>
+          <label class="form-label">Nome da avaliação</label>
+          <input id="eval-name" type="text" required class="form-input-dark" placeholder="Ex: Prova Final - Excel">
+        </div>
+        <div>
+          <label class="form-label">Treinamento relacionado</label>
+          <select id="eval-training" class="form-input-dark" required></select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="form-label">Questões</label>
+            <input id="eval-questions" type="number" min="1" required class="form-input-dark" placeholder="10">
+          </div>
+          <div>
+            <label class="form-label">Duração</label>
+            <input id="eval-duration" type="text" required class="form-input-dark" placeholder="30 min">
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Nota máxima</label>
+          <input id="eval-max-score" type="number" min="1" required class="form-input-dark" placeholder="100">
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeAddEvaluationModal()" class="btn-ghost flex-1">Cancelar</button>
+          <button type="submit" class="btn-primary flex-1">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            Salvar Avaliação
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Certificate Modal -->
+  <div id="modal-certificate" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-bg" onclick="closeCertificateModal()"></div>
+    <div class="modal-card w-full max-w-lg">
+      <div class="modal-header">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i data-lucide="award" class="w-5 h-5 text-yellow-400"></i>
+          Emitir Certificado
+        </h3>
+        <button onclick="closeCertificateModal()" class="modal-close"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <label class="form-label">Aluno</label>
+          <select id="cert-student" class="form-input-dark"></select>
+        </div>
+        <div>
+          <label class="form-label">Treinamento</label>
+          <select id="cert-training" class="form-input-dark"></select>
+        </div>
+        <div>
+          <label class="form-label">Data de conclusão</label>
+          <input id="cert-date" type="date" class="form-input-dark">
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button onclick="closeCertificateModal()" class="btn-ghost flex-1">Cancelar</button>
+          <button onclick="issueCertificate()" class="btn-primary flex-1">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            Emitir Certificado
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div id="modal-quiz" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-bg"></div>
+    <div class="modal-card w-full max-w-xl max-h-[90vh] overflow-y-auto">
+      <div class="modal-header">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2" id="quiz-modal-title">
+          <i data-lucide="help-circle" class="w-5 h-5 text-purple-400"></i>
+          Quiz
+        </h3>
+        <button onclick="closeQuizModal()" class="modal-close"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div id="quiz-modal-content" class="p-5"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-4 right-4 flex flex-col gap-2 z-[100]"></div>
+
+  <script src="script.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+
+</html>
